@@ -1,0 +1,64 @@
+.cs-content-card {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  transition: all 0.2s ease;
+}
+
+.cs-content-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.cs-content-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radius-md);
+  background-color: var(--gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.cs-content-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cs-content-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--headerColor);
+  margin: 0;
+}
+
+.cs-content-desc {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  margin: 0;
+}
+
+.cs-content-status {
+  font-size: 0.75rem;
+  color: var(--gray-500);
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .cs-content-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cs-content-status {
+    align-self: flex-end;
+  }
+}

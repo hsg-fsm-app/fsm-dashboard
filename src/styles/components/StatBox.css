@@ -1,0 +1,65 @@
+.cs-stat-box {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  gap: var(--spacing-lg);
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+  transition: all 0.2s ease;
+}
+
+.cs-stat-box:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.cs-stat-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cs-stat-icon.cs-primary {
+  background-color: #fee2e2;
+  color: var(--primary);
+}
+
+.cs-stat-icon.cs-success {
+  background-color: #dcfce7;
+  color: var(--success);
+}
+
+.cs-stat-icon.cs-warning {
+  background-color: #fef3c7;
+  color: var(--warning);
+}
+
+.cs-stat-icon.cs-info {
+  background-color: #dbeafe;
+  color: var(--info);
+}
+
+.cs-stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cs-stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--headerColor);
+  line-height: 1;
+}
+
+.cs-stat-label {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  font-weight: 500;
+}

@@ -1,0 +1,155 @@
+.cs-feature-card {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  transition: all 0.2s ease;
+}
+
+.cs-feature-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.cs-feature-card.cs-locked {
+  background-color: var(--gray-50);
+  opacity: 0.85;
+}
+
+.cs-feature-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cs-feature-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-md);
+  background-color: var(--gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+
+.cs-feature-card.cs-locked .cs-feature-icon {
+  color: var(--gray-400);
+}
+
+.cs-feature-status {
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cs-feature-status.cs-active {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.cs-feature-status.cs-locked {
+  background-color: var(--gray-200);
+  color: var(--gray-600);
+}
+
+.cs-feature-name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--headerColor);
+  margin: 0;
+}
+
+.cs-feature-description {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  line-height: 1.5;
+  margin: 0;
+  flex: 1;
+}
+
+.cs-feature-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--gray-200);
+}
+
+/* Toggle Button */
+.cs-toggle-button {
+  position: relative;
+  width: 3rem;
+  height: 1.75rem;
+  background-color: var(--gray-300);
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.cs-toggle-button.cs-enabled {
+  background-color: var(--primary);
+}
+
+.cs-toggle-button.cs-disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.cs-toggle-button:hover:not(.cs-disabled) {
+  opacity: 0.9;
+}
+
+.cs-toggle-slider {
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.cs-toggle-button.cs-enabled .cs-toggle-slider {
+  transform: translateX(1.25rem);
+}
+
+.cs-feature-link {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.cs-feature-link:hover {
+  color: #e55a2e;
+  text-decoration: underline;
+}
+
+.cs-unlock-button {
+  padding: 0.5rem 1rem;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cs-unlock-button:hover {
+  background-color: #e55a2e;
+  transform: translateY(-1px);
+}
