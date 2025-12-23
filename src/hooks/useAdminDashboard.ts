@@ -25,7 +25,7 @@ interface SiteConfig {
   }>;
 }
 
-const API_URL = 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_LAMBDA_API_URL || 'http://localhost:3000';
 
 export const useAdminDashboard = () => {
   const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
