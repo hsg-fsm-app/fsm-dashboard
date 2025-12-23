@@ -86,3 +86,4 @@ npm run server
 ```
 
 Vite dev server is configured to proxy API requests to the backend.
+# fsm-dashboard
