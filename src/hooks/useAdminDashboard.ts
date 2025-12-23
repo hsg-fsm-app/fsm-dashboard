@@ -1,77 +1,162 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ThemeColors, CompanyInfo } from '@types/index';
 
+interface SiteConfig {
+  theme: {
+    primaryColor: string;
+    secondaryColor: string;
+    accentColor: string;
+    logoUrl: string;
+    logoDarkUrl: string;
+    faviconUrl: string;
+  };
+  company: {
+    name: string;
+    phone: string;
+    email: string;
+    address: string;
+  };
+  modules: Record<string, {
+    enabled: boolean;
+    locked: boolean;
+    path: string;
+    name: string;
+    description: string;
+  }>;
+}
+
+const API_URL = 'http://localhost:3000';
+
 export const useAdminDashboard = () => {
-  const [themeColors, setThemeColors] = useState<ThemeColors>({
+  const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch initial config from server
+  useEffect(() => {
+    fetchConfig();
+  }, []);
+
+  const fetchConfig = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/site-config`);
+      if (response.ok) {
+        const config = await response.json();
+        setSiteConfig(config);
+      }
+    } catch (error) {
+      console.error('Error fetching config:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Derive state from siteConfig
+  const themeColors: ThemeColors = siteConfig ? {
+    primary: siteConfig.theme.primaryColor,
+    secondary: siteConfig.theme.secondaryColor,
+    headerColor: siteConfig.theme.accentColor,
+  } : {
     primary: '#ff6a3e',
     secondary: '#ffba43',
     headerColor: '#1a1a1a',
-  });
+  };
 
-  const [companyInfo, setCompanyInfo] = useState<CompanyInfo>({
+  const companyInfo: CompanyInfo = siteConfig?.company || {
     name: 'Your Company Name',
     phone: '(555) 123-4567',
     email: 'info@company.com',
     address: '123 Main St, City, ST 12345',
-  });
+  };
 
-  const [features, setFeatures] = useState([
-    { id: 1, name: 'Project Estimator', enabled: true, status: 'active' as const, link: '/estimator/' },
-    { id: 2, name: 'Client Portal', enabled: true, status: 'active' as const, link: '/portal/' },
-    { id: 3, name: 'Job Management', enabled: true, status: 'active' as const, link: '/jobs/' },
-    { id: 4, name: 'CRM System', enabled: true, status: 'active' as const, link: '/crm/' },
-    { id: 5, name: 'Advanced Analytics', enabled: false, status: 'locked' as const },
-    { id: 6, name: 'Email Marketing', enabled: false, status: 'locked' as const },
-    { id: 7, name: 'Scheduling & Calendar', enabled: false, status: 'locked' as const },
-    { id: 8, name: 'Invoice & Payments', enabled: false, status: 'locked' as const },
-  ]);
+  // Convert modules object to array format
+  const features = siteConfig ? Object.entries(siteConfig.modules).map(([key, module], index) => ({
+    id: index + 1,
+    key,
+    name: module.name,
+    description: module.description,
+    enabled: module.enabled,
+    status: module.locked ? 'locked' as const : 'active' as const,
+    link: module.path,
+    locked: module.locked,
+  })) : [];
 
   const updateThemeColor = (key: keyof ThemeColors, value: string) => {
-    setThemeColors(prev => ({ ...prev, [key]: value }));
+    if (!siteConfig) return;
+    
+    const colorMap: Record<keyof ThemeColors, string> = {
+      primary: 'primaryColor',
+      secondary: 'secondaryColor',
+      headerColor: 'accentColor',
+    };
+    
+    setSiteConfig({
+      ...siteConfig,
+      theme: {
+        ...siteConfig.theme,
+        [colorMap[key]]: value,
+      },
+    });
     document.documentElement.style.setProperty(`--${key}`, value);
   };
 
   const updateCompanyInfo = (key: keyof CompanyInfo, value: string) => {
-    setCompanyInfo(prev => ({ ...prev, [key]: value }));
+    if (!siteConfig) return;
+    
+    setSiteConfig({
+      ...siteConfig,
+      company: {
+        ...siteConfig.company,
+        [key]: value,
+      },
+    });
   };
 
   const toggleFeature = (id: number) => {
-    setFeatures(prev =>
-      prev.map(feature =>
-        feature.id === id && feature.status === 'active'
-          ? { ...feature, enabled: !feature.enabled }
-          : feature
-      )
-    );
+    if (!siteConfig) return;
+    
+    const feature = features.find(f => f.id === id);
+    if (!feature || feature.locked) return;
+    
+    setSiteConfig({
+      ...siteConfig,
+      modules: {
+        ...siteConfig.modules,
+        [feature.key]: {
+          ...siteConfig.modules[feature.key],
+          enabled: !siteConfig.modules[feature.key].enabled,
+        },
+      },
+    });
   };
 
   const unlockFeature = (id: number) => {
-    // This would typically make an API call
-    console.log('Unlock feature:', id);
-    alert('Feature unlock functionality would go here');
+    const feature = features.find(f => f.id === id);
+    if (!feature) return;
+    
+    alert(`Unlock ${feature.name}? This would typically process payment and unlock the feature.`);
+    // TODO: Implement unlock logic with payment processing
   };
 
   const saveChanges = async () => {
+    if (!siteConfig) return;
+    
     try {
-      // This would typically make an API call to save settings
-      const response = await fetch('/api/admin/save', {
+      const response = await fetch(`${API_URL}/api/site-config/save`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          themeColors,
-          companyInfo,
-          features,
-        }),
+        body: JSON.stringify(siteConfig),
       });
       
       if (response.ok) {
-        alert('Changes saved successfully!');
+        const result = await response.json();
+        alert('✓ Changes saved successfully!\n\nYour webapp will now use the updated configuration.');
+        console.log('CSS Variables generated:', result.css);
       } else {
         alert('Failed to save changes');
       }
     } catch (error) {
       console.error('Error saving changes:', error);
-      alert('Error saving changes');
+      alert('Error saving changes. Make sure the server is running on port 3000.');
     }
   };
 
@@ -79,6 +164,7 @@ export const useAdminDashboard = () => {
     themeColors,
     companyInfo,
     features,
+    loading,
     updateThemeColor,
     updateCompanyInfo,
     toggleFeature,

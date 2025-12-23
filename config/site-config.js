@@ -229,7 +229,7 @@ function createSiteConfig(overrides = {}) {
 // EXPORTS
 // ─────────────────────────────────────────────────────────────────────────────
 
-module.exports = {
+export {
   defaultSiteConfig,
   createSiteConfig,
   getActiveModuleCount,

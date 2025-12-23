@@ -11,12 +11,28 @@ const AdminDashboard = () => {
     themeColors,
     companyInfo,
     features,
+    loading,
     updateThemeColor,
     updateCompanyInfo,
     toggleFeature,
     unlockFeature,
     saveChanges,
   } = useAdminDashboard();
+
+  if (loading) {
+    return (
+      <main id="main">
+        <section id="admin-dashboard">
+          <div className="cs-container">
+            <div style={{ textAlign: 'center', padding: '4rem' }}>
+              <h2>Loading Dashboard...</h2>
+              <p>Fetching configuration from server...</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    );
+  }
 
   const UsersIcon = () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -139,17 +155,6 @@ const AdminDashboard = () => {
     <InvoiceIcon />,
   ];
 
-  const featureDescriptions = [
-    'Interactive tool for customers to estimate project costs and requirements.',
-    'Secure messaging system for customer communication and support.',
-    'Complete project tracking system with timelines and progress monitoring.',
-    'Customer relationship management with interaction tracking and follow-ups.',
-    'Comprehensive business insights, reports, and performance dashboards.',
-    'Automated email campaigns and customer engagement tools.',
-    'Integrated calendar system for appointments and team scheduling.',
-    'Automated invoicing and online payment processing system.',
-  ];
-
   return (
     <main id="main">
       <section id="admin-dashboard">
@@ -257,7 +262,9 @@ const AdminDashboard = () => {
             <div className="cs-admin-section">
               <div className="cs-section-header">
                 <h2 className="cs-section-title">Feature Modules</h2>
-                <span className="cs-section-badge cs-info">8 Active</span>
+                <span className="cs-section-badge cs-info">
+                  {features.filter(f => f.enabled && !f.locked).length} Active
+                </span>
               </div>
 
               <div className="cs-features-grid">
@@ -265,8 +272,8 @@ const AdminDashboard = () => {
                   <FeatureCard
                     key={feature.id}
                     name={feature.name}
-                    description={featureDescriptions[index]}
-                    icon={featureIcons[index]}
+                    description={feature.description}
+                    icon={featureIcons[index] || <EstimatorIcon />}
                     status={feature.status}
                     enabled={feature.enabled}
                     link={feature.link}

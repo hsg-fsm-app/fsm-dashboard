@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example Webapp - FSM Dashboard Integration</title>
+    
+    <!-- Option 1: Direct CSS link (easiest) -->
+    <link rel="stylesheet" href="http://localhost:3000/api/site-config/css">
+    
+    <style>
+        /* Your existing SCSS variables will be overridden by the API */
+        :root {
+            /* These will be updated from the dashboard */
+            --primary: #ff6a3e;
+            --secondary: #ffba43;
+            --headerColor: #1a1a1a;
+            --bodyTextColor: #4e4b66;
+            --bodyTextColorWhite: #fafbfc;
+        }
+        
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--bodyTextColor);
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 2rem;
+        }
+        
+        .company-info {
+            background: #f9fafb;
+            padding: 2rem;
+            margin: 2rem;
+            border-radius: 0.5rem;
+        }
+        
+        .feature-modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+        
+        .module {
+            padding: 1.5rem;
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 0.5rem;
+            display: none; /* Hidden by default, shown if enabled */
+        }
+        
+        .module.enabled {
+            display: block;
+        }
+        
+        .module h3 {
+            color: var(--headerColor);
+            margin-top: 0;
+        }
+        
+        .module a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="company-name">Loading...</h1>
+        <p class="company-tagline">Managed by FSM Dashboard</p>
+    </header>
+    
+    <div class="company-info">
+        <h2>Contact Us</h2>
+        <p><strong>Phone:</strong> <a class="company-phone" href="tel:">Loading...</a></p>
+        <p><strong>Email:</strong> <a class="company-email" href="mailto:">Loading...</a></p>
+        <p><strong>Address:</strong> <span class="company-address">Loading...</span></p>
+    </div>
+    
+    <div class="feature-modules">
+        <div class="module" data-module="projectEstimator">
+            <h3>Project Estimator</h3>
+            <p>Get an instant quote for your project.</p>
+            <a href="/estimator/">Start Estimating →</a>
+        </div>
+        
+        <div class="module" data-module="clientPortal">
+            <h3>Client Portal</h3>
+            <p>Secure access to your project information.</p>
+            <a href="/portal/">Access Portal →</a>
+        </div>
+        
+        <div class="module" data-module="jobManagement">
+            <h3>Job Management</h3>
+            <p>Track your projects in real-time.</p>
+            <a href="/jobs/">View Jobs →</a>
+        </div>
+        
+        <div class="module" data-module="crm">
+            <h3>CRM System</h3>
+            <p>Manage customer relationships.</p>
+            <a href="/crm/">Open CRM →</a>
+        </div>
+    </div>
+    
+    <div style="padding: 2rem; text-align: center;">
+        <button onclick="loadConfig()">🔄 Reload Configuration</button>
+        <p style="margin-top: 1rem; color: #6b7280; font-size: 0.875rem;">
+            Configuration is managed by the FSM Dashboard
+        </p>
+    </div>
+    
+    <!-- Option 2: Fetch JSON and apply (more control) -->
+    <script>
+        async function loadConfig() {
+            try {
+                const response = await fetch('http://localhost:3000/api/site-config');
+                const config = await response.json();
+                
+                console.log('Loaded config:', config);
+                
+                // Apply theme colors
+                document.documentElement.style.setProperty('--primary', config.theme.primaryColor);
+                document.documentElement.style.setProperty('--secondary', config.theme.secondaryColor);
+                document.documentElement.style.setProperty('--headerColor', config.theme.accentColor);
+                
+                // Update company info
+                document.querySelector('.company-name').textContent = config.company.name;
+                document.querySelector('.company-phone').textContent = config.company.phone;
+                document.querySelector('.company-phone').href = `tel:${config.company.phone}`;
+                document.querySelector('.company-email').textContent = config.company.email;
+                document.querySelector('.company-email').href = `mailto:${config.company.email}`;
+                document.querySelector('.company-address').textContent = config.company.address;
+                
+                // Show/hide feature modules based on enabled state
+                Object.entries(config.modules).forEach(([key, module]) => {
+                    const element = document.querySelector(`[data-module="${key}"]`);
+                    if (element) {
+                        if (module.enabled && !module.locked) {
+                            element.classList.add('enabled');
+                        } else {
+                            element.classList.remove('enabled');
+                        }
+                    }
+                });
+                
+                // Show success message
+                console.log('✓ Configuration loaded successfully!');
+                
+            } catch (error) {
+                console.error('Error loading configuration:', error);
+                alert('Failed to load configuration. Make sure the API server is running on port 3000.');
+            }
+        }
+        
+        // Load configuration on page load
+        loadConfig();
+        
+        // Optional: Auto-reload configuration every 30 seconds
+        setInterval(loadConfig, 30000);
+    </script>
+</body>
+</html>
