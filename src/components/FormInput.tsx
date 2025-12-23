@@ -1,4 +1,4 @@
-import { FormInputProps } from '@types/index';
+import { FormInputProps } from '@/types';
 import '@styles/components/FormInput.css';
 
 const FormInput: React.FC<FormInputProps> = ({ label, type, value, placeholder, onChange }) => {

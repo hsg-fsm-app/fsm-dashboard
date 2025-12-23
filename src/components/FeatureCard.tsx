@@ -1,4 +1,4 @@
-import { FeatureCardProps } from '@types/index';
+import { FeatureCardProps } from '@/types';
 import '@styles/components/FeatureCard.css';
 
 const FeatureCard: React.FC<FeatureCardProps> = ({ 

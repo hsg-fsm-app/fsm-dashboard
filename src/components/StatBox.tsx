@@ -1,4 +1,4 @@
-import { StatBoxProps } from '@types/index';
+import { StatBoxProps } from '@/types';
 import '@styles/components/StatBox.css';
 
 const StatBox: React.FC<StatBoxProps> = ({ icon, number, label, variant }) => {

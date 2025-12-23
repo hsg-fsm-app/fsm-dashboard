@@ -1,4 +1,4 @@
-import { ColorPickerProps } from '@types/index';
+import { ColorPickerProps } from '@/types';
 import '@styles/components/ColorPicker.css';
 
 const ColorPicker: React.FC<ColorPickerProps> = ({ label, value, cssVar, onChange }) => {

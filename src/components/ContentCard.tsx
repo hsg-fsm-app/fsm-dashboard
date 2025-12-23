@@ -1,4 +1,4 @@
-import { ContentCardProps } from '@types/index';
+import { ContentCardProps } from '@/types';
 import '@styles/components/ContentCard.css';
 
 const ContentCard: React.FC<ContentCardProps> = ({ title, description, icon, lastUpdated }) => {

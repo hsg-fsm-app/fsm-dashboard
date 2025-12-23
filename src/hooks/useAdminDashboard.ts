@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ThemeColors, CompanyInfo } from '@types/index';
+import { ThemeColors, CompanyInfo } from '@/types';
 
 interface SiteConfig {
   theme: {
