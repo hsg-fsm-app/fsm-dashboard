@@ -1,0 +1,298 @@
+/* Common View Styles */
+.cs-dashboard-view,
+.cs-site-config-view,
+.cs-blog-management-view {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.cs-view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  gap: 2rem;
+}
+
+.cs-view-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.cs-view-subtitle {
+  font-size: 1rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.cs-view-actions {
+  display: flex;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.cs-dashboard-section,
+.cs-config-section,
+.cs-blog-section {
+  margin-bottom: 2rem;
+}
+
+/* Blog Management Specific Styles */
+.cs-blog-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.cs-blog-stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.cs-stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary, #007bff);
+  margin: 0 0 0.5rem 0;
+}
+
+.cs-stat-label {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cs-blog-filters {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cs-filter-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #e2e8f0;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.cs-filter-btn:hover {
+  border-color: var(--primary, #007bff);
+  color: var(--primary, #007bff);
+}
+
+.cs-filter-btn--active {
+  background: var(--primary, #007bff);
+  color: white;
+  border-color: var(--primary, #007bff);
+}
+
+.cs-blog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cs-blog-post-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease;
+}
+
+.cs-blog-post-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.cs-blog-post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.cs-blog-post-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.cs-blog-post-excerpt {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.cs-status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.cs-badge-success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.cs-badge-warning {
+  background: #fef3c7;
+  color: #854d0e;
+}
+
+.cs-badge-info {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.cs-badge-default {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.cs-blog-post-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.cs-blog-post-info {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.cs-meta-item {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.cs-meta-item strong {
+  color: #475569;
+  font-weight: 600;
+}
+
+.cs-blog-post-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cs-icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cs-icon-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cs-icon-button--primary:hover {
+  background: var(--primary, #007bff);
+  border-color: var(--primary, #007bff);
+  color: white;
+}
+
+.cs-icon-button--danger:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: white;
+}
+
+.cs-category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.cs-category-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.cs-category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.cs-category-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.cs-category-count {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Button Styles */
+.cs-button,
+.cs-button-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.cs-button {
+  background: var(--primary, #007bff);
+  color: white;
+}
+
+.cs-button:hover {
+  background: var(--primary-dark, #0056b3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.cs-button-secondary {
+  background: white;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.cs-button-secondary:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}

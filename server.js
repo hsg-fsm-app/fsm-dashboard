@@ -77,3 +77,18 @@ const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
   console.log(`Dashboard API running on http://localhost:${PORT}`)
 })
+
+/**
+ * Client Website (just add one line)
+ * <!-- Option 1: Link to CSS endpoint (easiest) -->
+<link rel="stylesheet" href="http://localhost:3000/api/site-config/css">
+
+<!-- Option 2: Fetch JSON and apply -->
+<script>
+fetch("http://localhost:3000/api/site-config")
+  .then(res => res.json())
+  .then(config => {
+    document.documentElement.style.setProperty("--primary", config.theme.primaryColor)
+  })
+</script>
+ */
