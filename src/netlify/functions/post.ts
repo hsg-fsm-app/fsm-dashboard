@@ -24,7 +24,7 @@ export const handler: Handler = async (event) => {
       const slug = event.queryStringParameters.slug;
 
       const { data, error } = await supabase
-        .from('posts')
+        .from('blog_posts')
         .select('*')
         .eq('slug', slug)
         .eq('status', 'published')
@@ -48,7 +48,7 @@ export const handler: Handler = async (event) => {
     // Get all posts
     if (event.httpMethod === 'GET') {
       const { data, error } = await supabase
-        .from('posts')
+        .from('blog_posts')
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -74,7 +74,7 @@ export const handler: Handler = async (event) => {
       const postData = JSON.parse(event.body);
 
       const { data, error } = await supabase
-        .from('posts')
+        .from('blog_posts')
         .upsert(postData)
         .select()
         .single();
@@ -101,7 +101,7 @@ export const handler: Handler = async (event) => {
       }
 
       const { error } = await supabase
-        .from('posts')
+        .from('blog_posts')
         .delete()
         .eq('id', id);
 
