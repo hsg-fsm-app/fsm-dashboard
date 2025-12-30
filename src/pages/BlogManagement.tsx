@@ -1,12 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import BlogPostModal from '../components/BlogPostModal';
 
 interface BlogPost {
-  id: string;
+  id?: string;
   title: string;
+  slug: string;
   excerpt: string;
   content: string;
   author: string;
-  date: string;
+  published_at: string | null;
   image: string;
   alt: string;
   status: 'published' | 'draft' | 'scheduled';
@@ -15,6 +17,34 @@ interface BlogPost {
 
 const BlogManagement = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
+  const [activeFilter, setActiveFilter] = useState<'all' | 'published' | 'draft' | 'scheduled'>('all');
+
+  // Dynamic stats calculated from posts
+  const stats = useMemo(() => ({
+    total: posts.length,
+    published: posts.filter(p => p.status === 'published').length,
+    drafts: posts.filter(p => p.status === 'draft').length,
+    scheduled: posts.filter(p => p.status === 'scheduled').length,
+  }), [posts]);
+
+  // Filtered posts based on active filter
+  const filteredPosts = useMemo(() => {
+    if (activeFilter === 'all') return posts;
+    return posts.filter(p => p.status === activeFilter);
+  }, [posts, activeFilter]);
+
+  // Category stats from posts
+  const categoryStats = useMemo(() => {
+    const counts: Record<string, number> = {};
+    posts.forEach(post => {
+      if (post.category) {
+        counts[post.category] = (counts[post.category] || 0) + 1;
+      }
+    });
+    return Object.entries(counts).map(([name, count]) => ({ name, count }));
+  }, [posts]);
 
   const fetchPosts = () => {
     fetch('/.netlify/functions/post')
@@ -37,13 +67,18 @@ const BlogManagement = () => {
   };
 
   const handleNewPost = () => {
-    // TODO: Open modal/form to create new post
-    alert('New Post form - connect to a modal component with savePost()');
+    setEditingPost(null);
+    setIsModalOpen(true);
   };
 
   const handleEditPost = (post: BlogPost) => {
-    // TODO: Open modal/form to edit post
-    alert(`Edit post: ${post.title} - connect to a modal component with savePost()`);
+    setEditingPost(post);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingPost(null);
   };
 
   const handleDeletePost = async (id: string) => {
@@ -100,19 +135,19 @@ const BlogManagement = () => {
 
       <div className="cs-blog-stats">
         <div className="cs-blog-stat-card">
-          <h3 className="cs-stat-number">12</h3>
+          <h3 className="cs-stat-number">{stats.total}</h3>
           <p className="cs-stat-label">Total Posts</p>
         </div>
         <div className="cs-blog-stat-card">
-          <h3 className="cs-stat-number">8</h3>
+          <h3 className="cs-stat-number">{stats.published}</h3>
           <p className="cs-stat-label">Published</p>
         </div>
         <div className="cs-blog-stat-card">
-          <h3 className="cs-stat-number">3</h3>
+          <h3 className="cs-stat-number">{stats.drafts}</h3>
           <p className="cs-stat-label">Drafts</p>
         </div>
         <div className="cs-blog-stat-card">
-          <h3 className="cs-stat-number">1</h3>
+          <h3 className="cs-stat-number">{stats.scheduled}</h3>
           <p className="cs-stat-label">Scheduled</p>
         </div>
       </div>
@@ -121,15 +156,40 @@ const BlogManagement = () => {
         <div className="cs-section-header">
           <h2 className="cs-section-title">Recent Posts</h2>
           <div className="cs-blog-filters">
-            <button className="cs-filter-btn cs-filter-btn--active">All</button>
-            <button className="cs-filter-btn">Published</button>
-            <button className="cs-filter-btn">Drafts</button>
-            <button className="cs-filter-btn">Scheduled</button>
+            <button 
+              className={`cs-filter-btn ${activeFilter === 'all' ? 'cs-filter-btn--active' : ''}`}
+              onClick={() => setActiveFilter('all')}
+            >
+              All
+            </button>
+            <button 
+              className={`cs-filter-btn ${activeFilter === 'published' ? 'cs-filter-btn--active' : ''}`}
+              onClick={() => setActiveFilter('published')}
+            >
+              Published
+            </button>
+            <button 
+              className={`cs-filter-btn ${activeFilter === 'draft' ? 'cs-filter-btn--active' : ''}`}
+              onClick={() => setActiveFilter('draft')}
+            >
+              Drafts
+            </button>
+            <button 
+              className={`cs-filter-btn ${activeFilter === 'scheduled' ? 'cs-filter-btn--active' : ''}`}
+              onClick={() => setActiveFilter('scheduled')}
+            >
+              Scheduled
+            </button>
           </div>
         </div>
 
         <div className="cs-blog-list">
-          {posts.map((post) => (
+          {filteredPosts.length === 0 && (
+            <div className="cs-empty-state">
+              <p>No posts found. {activeFilter !== 'all' ? 'Try a different filter or ' : ''}Click "New Post" to create one.</p>
+            </div>
+          )}
+          {filteredPosts.map((post) => (
             <div key={post.id} className="cs-blog-post-card">
               <div className="cs-blog-post-header">
                 <div>
@@ -146,7 +206,7 @@ const BlogManagement = () => {
                     <strong>Author:</strong> {post.author}
                   </span>
                   <span className="cs-meta-item">
-                    <strong>Date:</strong> {new Date(post.date).toLocaleDateString()}
+                    <strong>Date:</strong> {post.published_at ? new Date(post.published_at).toLocaleDateString() : 'Not set'}
                   </span>
                   <span className="cs-meta-item">
                     <strong>Category:</strong> {post.category}
@@ -156,7 +216,7 @@ const BlogManagement = () => {
                   <button className="cs-icon-button cs-icon-button--primary" title="Edit" onClick={() => handleEditPost(post)}>
                     <EditIcon />
                   </button>
-                  <button className="cs-icon-button cs-icon-button--danger" title="Delete" onClick={() => handleDeletePost(post.id)}>
+                  <button className="cs-icon-button cs-icon-button--danger" title="Delete" onClick={() => post.id && handleDeletePost(post.id)}>
                     <DeleteIcon />
                   </button>
                 </div>
@@ -173,24 +233,24 @@ const BlogManagement = () => {
         </div>
 
         <div className="cs-category-grid">
-          <div className="cs-category-card">
-            <h4 className="cs-category-name">Renovation</h4>
-            <p className="cs-category-count">5 posts</p>
-          </div>
-          <div className="cs-category-card">
-            <h4 className="cs-category-name">Design</h4>
-            <p className="cs-category-count">3 posts</p>
-          </div>
-          <div className="cs-category-card">
-            <h4 className="cs-category-name">Materials</h4>
-            <p className="cs-category-count">2 posts</p>
-          </div>
-          <div className="cs-category-card">
-            <h4 className="cs-category-name">Tips & Guides</h4>
-            <p className="cs-category-count">2 posts</p>
-          </div>
+          {categoryStats.length === 0 && (
+            <p className="cs-empty-text">No categories yet. Create posts with categories to see them here.</p>
+          )}
+          {categoryStats.map(({ name, count }) => (
+            <div key={name} className="cs-category-card">
+              <h4 className="cs-category-name">{name}</h4>
+              <p className="cs-category-count">{count} {count === 1 ? 'post' : 'posts'}</p>
+            </div>
+          ))}
         </div>
       </div>
+
+      <BlogPostModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSave={savePost}
+        post={editingPost}
+      />
     </div>
   );
 };

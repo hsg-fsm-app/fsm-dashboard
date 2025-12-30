@@ -1,0 +1,277 @@
+/* Modal Overlay */
+.cs-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Modal Container */
+.cs-modal {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modal Header */
+.cs-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.cs-modal-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.cs-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 8px;
+  color: #64748b;
+  transition: all 0.2s ease;
+}
+
+.cs-modal-close:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+/* Modal Tabs */
+.cs-modal-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 2rem;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.cs-modal-tab {
+  padding: 1rem 1.5rem;
+  border: none;
+  background: transparent;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.cs-modal-tab:hover {
+  color: #1e293b;
+}
+
+.cs-modal-tab--active {
+  color: var(--primary, #ff6a3e);
+}
+
+.cs-modal-tab--active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--primary, #ff6a3e);
+  border-radius: 3px 3px 0 0;
+}
+
+/* Modal Body */
+.cs-modal-body {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+/* Form Layout */
+.cs-form-row {
+  margin-bottom: 1.5rem;
+}
+
+.cs-form-row--two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.cs-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cs-form-group--full {
+  grid-column: 1 / -1;
+}
+
+.cs-form-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.cs-form-input {
+  padding: 0.75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  color: #1e293b;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.cs-form-input:focus {
+  outline: none;
+  border-color: var(--primary, #ff6a3e);
+  box-shadow: 0 0 0 3px rgba(255, 106, 62, 0.1);
+}
+
+.cs-form-input::placeholder {
+  color: #94a3b8;
+}
+
+.cs-form-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+.cs-form-textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  line-height: 1.6;
+}
+
+.cs-form-textarea--large {
+  min-height: 200px;
+}
+
+.cs-form-hint {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+/* URL Preview */
+.cs-url-preview {
+  display: flex;
+  align-items: stretch;
+}
+
+.cs-url-base {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  font-size: 0.9375rem;
+  color: #64748b;
+}
+
+.cs-url-preview .cs-form-input {
+  border-radius: 0 8px 8px 0;
+}
+
+/* Image Preview */
+.cs-image-preview {
+  margin-top: 1.5rem;
+}
+
+.cs-image-preview img {
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+/* Modal Footer */
+.cs-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+  border-radius: 0 0 16px 16px;
+}
+
+.cs-modal-footer .cs-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .cs-modal-overlay {
+    padding: 1rem;
+  }
+
+  .cs-modal {
+    max-height: 95vh;
+  }
+
+  .cs-modal-header,
+  .cs-modal-body,
+  .cs-modal-footer {
+    padding: 1rem;
+  }
+
+  .cs-modal-tabs {
+    padding: 0 1rem;
+    overflow-x: auto;
+  }
+
+  .cs-form-row--two {
+    grid-template-columns: 1fr;
+  }
+}
