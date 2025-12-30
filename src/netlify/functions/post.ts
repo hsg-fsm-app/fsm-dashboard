@@ -151,3 +151,25 @@ export const handler: Handler = async (event) => {
 );
 
  */
+
+/**
+ * HOW THE BLOG SYSTEM WORKS:
+ * 
+ * 1. Admin Dashboard (BlogManagement.tsx) - React UI for managing blog posts
+ *    - Lists all posts with filtering by status (published/draft/scheduled)
+ *    - Opens BlogPostModal for creating/editing posts
+ * 
+ * 2. This Netlify Function - Serverless API endpoint at /.netlify/functions/post
+ *    - GET: Fetch all posts or single post by slug
+ *    - POST: Create or update post (upsert by id)
+ *    - DELETE: Remove post by id
+ * 
+ * 3. Supabase Database - PostgreSQL table 'posts' stores all blog data
+ *    - Auto-generates UUID for each post
+ *    - Enforces status constraints (draft/published/scheduled)
+ *    - Tracks created_at and published_at timestamps
+ * 
+ * 4. Public Website Integration - Fetch published posts for display
+ *    - GET /.netlify/functions/post?slug=my-post - Single post
+ *    - GET /.netlify/functions/post - All posts (filter by status='published' on frontend)
+ */
