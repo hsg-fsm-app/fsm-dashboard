@@ -5,7 +5,8 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-export type NavItem = 'dashboard' | 'site-config' | 'blog-management';
+// Added 'chat' to support new chat dashboard navigation
+export type NavItem = 'dashboard' | 'site-config' | 'blog-management' | 'chat';
 
 interface NavigationProps {
   activeView: NavItem;
@@ -38,11 +39,19 @@ const BlogIcon = () => (
   </svg>
 );
 
+// Chat icon for customer messaging feature
+const ChatIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+  </svg>
+);
+
 const Navigation = ({ activeView, onNavigate }: NavigationProps) => {
   const navItems = [
     { id: 'dashboard' as NavItem, label: 'Dashboard', icon: <DashboardIcon /> },
     { id: 'site-config' as NavItem, label: 'Site Configuration', icon: <SettingsIcon /> },
     { id: 'blog-management' as NavItem, label: 'Blog Management', icon: <BlogIcon /> },
+    { id: 'chat' as NavItem, label: 'Customer Chat', icon: <ChatIcon /> },
   ];
 
   return (
