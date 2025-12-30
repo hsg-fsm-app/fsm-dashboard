@@ -1,45 +1,59 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface BlogPost {
   id: string;
   title: string;
   excerpt: string;
+  content: string;
   author: string;
   date: string;
+  image: string;
+  alt: string;
   status: 'published' | 'draft' | 'scheduled';
   category: string;
 }
 
 const BlogManagement = () => {
-  const [posts] = useState<BlogPost[]>([
-    {
-      id: '1',
-      title: '10 Tips for a Successful Home Renovation',
-      excerpt: 'Learn the essential tips for planning and executing a home renovation project...',
-      author: 'John Doe',
-      date: '2024-12-15',
-      status: 'published',
-      category: 'Renovation'
-    },
-    {
-      id: '2',
-      title: 'Modern Kitchen Design Trends 2024',
-      excerpt: 'Explore the latest trends in kitchen design and how to incorporate them...',
-      author: 'Jane Smith',
-      date: '2024-12-10',
-      status: 'published',
-      category: 'Design'
-    },
-    {
-      id: '3',
-      title: 'Choosing the Right Materials for Your Project',
-      excerpt: 'A comprehensive guide to selecting the best materials for different applications...',
-      author: 'John Doe',
-      date: '2024-12-20',
-      status: 'draft',
-      category: 'Materials'
-    },
-  ]);
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+
+  const fetchPosts = () => {
+    fetch('/.netlify/functions/post')
+      .then(res => res.json())
+      .then(setPosts)
+      .catch(err => console.error('Error fetching posts:', err));
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const savePost = async (post: BlogPost) => {
+    await fetch('/.netlify/functions/post', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(post),
+    });
+    fetchPosts();
+  };
+
+  const handleNewPost = () => {
+    // TODO: Open modal/form to create new post
+    alert('New Post form - connect to a modal component with savePost()');
+  };
+
+  const handleEditPost = (post: BlogPost) => {
+    // TODO: Open modal/form to edit post
+    alert(`Edit post: ${post.title} - connect to a modal component with savePost()`);
+  };
+
+  const handleDeletePost = async (id: string) => {
+    if (confirm('Are you sure you want to delete this post?')) {
+      await fetch(`/.netlify/functions/post?id=${id}`, {
+        method: 'DELETE',
+      });
+      fetchPosts();
+    }
+  };
 
   const EditIcon = () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -78,7 +92,7 @@ const BlogManagement = () => {
           <h1 className="cs-view-title">Blog Management</h1>
           <p className="cs-view-subtitle">Create and manage your blog posts</p>
         </div>
-        <button className="cs-button">
+        <button className="cs-button" onClick={handleNewPost}>
           <PlusIcon />
           <span>New Post</span>
         </button>
@@ -139,10 +153,10 @@ const BlogManagement = () => {
                   </span>
                 </div>
                 <div className="cs-blog-post-actions">
-                  <button className="cs-icon-button cs-icon-button--primary" title="Edit">
+                  <button className="cs-icon-button cs-icon-button--primary" title="Edit" onClick={() => handleEditPost(post)}>
                     <EditIcon />
                   </button>
-                  <button className="cs-icon-button cs-icon-button--danger" title="Delete">
+                  <button className="cs-icon-button cs-icon-button--danger" title="Delete" onClick={() => handleDeletePost(post.id)}>
                     <DeleteIcon />
                   </button>
                 </div>
